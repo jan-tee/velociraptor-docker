@@ -8,12 +8,10 @@ RUN chmod +x entrypoint && \
     apt-get update && \
     apt-get install -y curl wget jq
 
-# Create dirs for Velo binaries
+# Create temporary directories for Velo binaries, get & move binaries into place
 RUN mkdir -p /opt/velociraptor && \
-    for i in linux mac windows; do mkdir -p /opt/velociraptor/$i; done
-
-# Get Velox binaries
-RUN WINDOWS_EXE=$(curl -s https://api.github.com/repos/velocidex/velociraptor/releases/latest | jq -r 'limit(1 ; ( .assets[].browser_download_url | select ( contains("windows-amd64.exe") )))')  && \
+    for i in linux mac windows; do mkdir -p /opt/velociraptor/$i; done && \
+    WINDOWS_EXE=$(curl -s https://api.github.com/repos/velocidex/velociraptor/releases/latest | jq -r 'limit(1 ; ( .assets[].browser_download_url | select ( contains("windows-amd64.exe") )))')  && \
     WINDOWS_MSI=$(curl -s https://api.github.com/repos/velocidex/velociraptor/releases/latest | jq -r 'limit(1 ; ( .assets[].browser_download_url | select ( contains("windows-amd64.msi") )))') && \
     LINUX_BIN=$(curl -s https://api.github.com/repos/velocidex/velociraptor/releases/latest | jq -r 'limit(1 ; ( .assets[].browser_download_url | select ( contains("linux-amd64") )))') && \
     MAC_BIN=$(curl -s https://api.github.com/repos/velocidex/velociraptor/releases/latest | jq -r 'limit(1 ; ( .assets[].browser_download_url | select ( contains("darwin-amd64") )))') && \
@@ -23,6 +21,9 @@ RUN WINDOWS_EXE=$(curl -s https://api.github.com/repos/velocidex/velociraptor/re
     wget -O /opt/velociraptor/windows/velociraptor_client.msi "$WINDOWS_MSI"
     
 WORKDIR /velociraptor 
+
+# create config dir
+RUN mkdir -p /velociraptor/config
 
 # Move binaries into place
 RUN \
