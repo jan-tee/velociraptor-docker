@@ -1,0 +1,47 @@
+name: Build Velociraptor Docker
+
+on:
+  push:
+    paths:
+      - VERSION.txt
+      
+  workflow_dispatch:
+
+jobs:
+  build:
+    timeout-minutes: 20
+
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE_NAME: velociraptor
+      SRC_PATH: Dockerfile
+
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v2
+
+      - name: Build image
+        run: |
+          DOCKER_BUILDKIT=1 docker build "${SRC_PATH}/" --tag build
+
+      - name: Log in to registry
+        run: |
+          echo "${{ github.token }}" | \
+            docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push image
+        run: |
+          TAG_VERSION=`cat "${SRC_PATH}/VERSION.txt"`
+
+          # Change all uppercase to lowercase
+          IMAGE_ID="ghcr.io/${{ github.repository }}/${IMAGE_NAME}"
+          IMAGE_ID="$(echo ${IMAGE_ID} | tr '[A-Z]' '[a-z]')"
+
+          # tag local build result images
+          docker tag build "${IMAGE_ID}:${TAG_VERSION}"
+          docker push "${IMAGE_ID}:${TAG_VERSION}"
+
+          # tag latest
+          docker tag build "${IMAGE_ID}:latest"
+          docker push "${IMAGE_ID}:latest"
