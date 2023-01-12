@@ -15,7 +15,7 @@ jobs:
 
     env:
       IMAGE_NAME: velociraptor
-      SRC_PATH: Dockerfile
+      SRC_PATH: ./
 
     steps:
       - name: Check out source code
