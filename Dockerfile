@@ -6,7 +6,7 @@ LABEL maintainer="Wes Lambert, @therealwlambert"
 COPY ./entrypoint .
 RUN chmod +x entrypoint && \
     apt-get update && \
-    apt-get install -y curl wget jq
+    apt-get install -y curl wget jq zip
 
 # Create temporary directories for Velo binaries, get & move binaries into place
 RUN mkdir -p /opt/velociraptor && \
