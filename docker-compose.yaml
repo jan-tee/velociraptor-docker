@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   velociraptor:
-    image: registry.at.home/velociraptor
+    image: my-registry/velociraptor
     volumes:
       - /data/velociraptor/logs:/opt/velociraptor/logs
       - /data/velociraptor/data:/opt/velociraptor/data
