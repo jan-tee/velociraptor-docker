@@ -1,21 +1,29 @@
-version: '2'
+version: '3.8'
 services:
   velociraptor:
-    container_name: velociraptor
-    #image: wlambert/velociraptor
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: registry.at.home/velociraptor
     volumes:
-      - ./velociraptor:/velociraptor/:rw
+      - /data/velociraptor/logs:/opt/velociraptor/logs
+      - /data/velociraptor/data:/opt/velociraptor/data
+      - /data/velociraptor/files:/opt/velociraptor/files
+      - /data/velociraptor/config:/opt/velociraptor/config
+      - /data/velociraptor/certs:/opt/velociraptor/certs
+      - /data/velociraptor/clients:/opt/velociraptor/clients
     environment:
-      - VELOX_USER=${VELOX_USER}
-      - VELOX_PASSWORD=${VELOX_PASSWORD}
-      - VELOX_ROLE=${VELOX_ROLE}
-      - VELOX_SERVER_URL=${VELOX_SERVER_URL}
-      - VELOX_FRONTEND_HOSTNAME=${VELOX_FRONTEND_HOSTNAME}
-    ports:
-      - "8000:8000"
-      - "8001:8001"
-      - "8889:8889"
+      VELOX_USER: "${VELOX_USER:?Specify a username}"
+      VELOX_PASSWORD: "${VELOX_PASSWORD:?Specify a password for the user}"
+      VELOX_ROLE: "${VELOX_ROLE?administrator}"
+      VELOX_SERVER_URL: "${VELOX_SERVER_URL:?Must specify a server URL. Must end with /}"
+      VELOX_FRONTEND_HOSTNAME: "${VELOX_FRONTEND_HOSTNAME:?Frontend server host name from the client's perspective.}"
+      VELOX_TLS_CERT: "${VELOX_TLS_CERT}"
+      VELOX_TLS_KEY: "${VELOX_TLS_KEY}"
+      VELOX_TLS_CA: "${VELOX_TLS_CA}"
     restart: unless-stopped
+    networks:
+      frontend:
+        ipv4_address: 10.10.1.55
+
+networks:
+  frontend:
+    external: true
+    name: frontend
