@@ -44,4 +44,6 @@ COPY --from=builder /opt/velociraptor/mac/velociraptor_client clients-raw/mac/ve
 COPY --from=builder /opt/velociraptor/windows/velociraptor_client* clients-raw/windows/
 RUN chmod a+x /opt/velociraptor/bin/velociraptor
 
+ENV PATH="/opt/velociraptor/bin:$PATH"
+
 ENTRYPOINT ["tini", "/usr/local/bin/start.sh"]

@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-export PATH="/opt/velociraptor/bin:$PATH"
 
 BIND_ADDRESS="0.0.0.0"
 PUBLIC_PATH="public"

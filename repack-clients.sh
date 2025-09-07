@@ -13,6 +13,16 @@ velociraptor config repack \
   clients/linux/velociraptor_client
 echo "Repacking Mac client"
 
+echo "Building Linux DEB client"
+velociraptor debian client \
+  --config config/client.config.yaml \
+  --output clients/linux/
+
+echo "Building Linux RPM client"
+velociraptor rpm client \
+  --config config/client.config.yaml \
+  --output clients/linux/
+
 velociraptor config repack \
   --exe clients-raw/mac/velociraptor_client \
   config/client.config.yaml \
