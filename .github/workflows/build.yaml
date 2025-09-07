@@ -23,7 +23,7 @@ jobs:
 
       - name: Build image
         run: |
-          DOCKER_BUILDKIT=1 docker build "${SRC_PATH}/" --tag build
+          DOCKER_BUILDKIT=1 docker build "${SRC_PATH}/" --tag build --build-args TAG=$(cat "${SRC_PATH}/VERSION")
 
       - name: Log in to registry
         run: |
@@ -32,7 +32,7 @@ jobs:
 
       - name: Push image
         run: |
-          TAG_VERSION=`cat "${SRC_PATH}/VERSION.txt"`
+          TAG_VERSION=`cat "${SRC_PATH}/VERSION"`
 
           # Change all uppercase to lowercase
           IMAGE_ID="ghcr.io/${{ github.repository }}/${IMAGE_NAME}"
