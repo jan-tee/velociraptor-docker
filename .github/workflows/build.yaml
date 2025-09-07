@@ -23,7 +23,7 @@ jobs:
 
       - name: Build image
         run: |
-          DOCKER_BUILDKIT=1 docker build "${SRC_PATH}/" --tag build --build-args TAG=$(cat "${SRC_PATH}/VERSION")
+          DOCKER_BUILDKIT=1 docker build "${SRC_PATH}/" --tag build --build-arg TAG=$(cat "${SRC_PATH}/VERSION")
 
       - name: Log in to registry
         run: |
