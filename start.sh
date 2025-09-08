@@ -43,8 +43,8 @@ EOF
 
 if [ ! -z "$VELOX_TLS_CERT" ] ; then
   echo "TLS configuration detected, enabling TLS in Velociraptor."
-  echo "  tls_certificate: \"${VELOX_TLS_CERT}\"" >> $tempfile
-  echo "  tls_key: \"${VELOX_TLS_KEY}\"" >> $tempfile
+  echo "  tls_certificate_filename: \"${VELOX_TLS_CERT}\"" >> $tempfile
+  echo "  tls_private_key_filename: \"${VELOX_TLS_KEY}\"" >> $tempfile
 fi
 
 cat  >> "${tempfile}"  << EOF
